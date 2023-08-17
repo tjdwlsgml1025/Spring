@@ -68,11 +68,11 @@
           select count(*) from mvc_board
       ]]>
 	</select>
-
+<!-- 게시글순대로 번호매겨줌 -->
 	<select id="getListWithPaging" resultType="BoardVO">
       <![CDATA[
         SELECT * FROM (
-              SELECT ROWNUM AS RNUM, A.* FROM ( <!-- 게시글순대로 번호매겨줌 -->
+              SELECT ROWNUM AS RNUM, A.* FROM ( 
                        SELECT
                              *
                          FROM

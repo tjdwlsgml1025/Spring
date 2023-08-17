@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import edu.global.ex.page.Criteria;
+import edu.global.ex.page.PageVO;
 import edu.global.ex.service.BoardService;
 import edu.global.ex.vo.BoardVO;
 import lombok.extern.slf4j.Slf4j;
@@ -90,24 +92,40 @@ public class BoardController {
 	// 7.답변뷰
 	// http://localhost:8585/board/reply_view?bid=?
 	@GetMapping("/reply_view")
-	public String reply_view(BoardVO boardVO,Model model) {
+	public String reply_view(BoardVO boardVO, Model model) {
 		log.info("reply_view..");
 
-		 //reply_view라는 이름으로 서비스에서 리드함수를 얻어온다(해당글받아옴)이때 bid는 글번호임
-		model.addAttribute("reply_view",boardService.read(boardVO.getBid()));
+		// reply_view라는 이름으로 서비스에서 리드함수를 얻어온다(해당글받아옴)이때 bid는 글번호임
+		model.addAttribute("reply_view", boardService.read(boardVO.getBid()));
 
 		return "/board/reply_view";
 	}
-	
+
 	// 8.답변작성뷰
-		// http://localhost:8585/board/reply
-		@PostMapping("/reply")
-		public String reply(BoardVO boardVO) {
-			log.info("reply..");
+	// http://localhost:8585/board/reply
+	@PostMapping("/reply")
+	public String reply(BoardVO boardVO) {
+		log.info("reply..");
 
-			boardService.registerReply(boardVO);
+		boardService.registerReply(boardVO);
 
-			return "redirect:list";
-		}
+		return "redirect:list";
+	}
+
+	// 9.페이징
+	@GetMapping("/list2") // get메소드로 처리하도록
+	public String list2(Criteria cri, Model model) {
+		log.info("list2() ..");
+		log.info("list2() criteria값 확인" + cri);
+
+		model.addAttribute("boardList", boardService.getListWithPaging(cri)); //글10개 가져오는 부분
+		
+		int total = boardService.getTotal();
+		log.info("list2() 게시판 전체 갯수;"+total);
+		
+		model.addAttribute("pageMaker",new PageVO(cri,total)); //페이지버튼 그리기 위한 정보들
+				
+		return "board/list2"; 
+	}
 
 }

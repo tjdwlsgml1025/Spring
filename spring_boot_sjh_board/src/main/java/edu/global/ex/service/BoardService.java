@@ -2,6 +2,7 @@ package edu.global.ex.service;
 
 import java.util.List;
 
+import edu.global.ex.page.Criteria;
 import edu.global.ex.vo.BoardVO;
 
 public interface BoardService{
@@ -11,5 +12,9 @@ public interface BoardService{
 	int remove(BoardVO boardVO); //글 삭제
 	void register(BoardVO boardVO); //글작성
 	void registerReply(BoardVO boardVO);//답글등록
+	
+	//페이징 처리함수
+	public int getTotal();
+	public List<BoardVO> getListWithPaging(Criteria cri);
 	
 }
