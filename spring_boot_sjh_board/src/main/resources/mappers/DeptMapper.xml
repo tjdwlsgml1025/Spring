@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="edu.global.ex.mapper.DeptMapper">
+
+	<!-- 조인이니까 두 테이블을 매핑시키는거임, 타입에는 해당 VO를 넣어주삼 즉, DB의 컬럼명과 VO의 이름을 매치시켜주면서 
+		매핑하는거야!!!!!!!!!!!!!이해!햏!! 여기는 1의 관계 -->
+	<resultMap id="empMap" type="EmpDeptVO">
+		<id property="empno" column="empno" />
+		<result property="ename" column="ename" />
+		<result property="job" column="job" />
+		<result property="mgr" column="mgr" />
+		<result property="hiredate" column="hiredate" />
+		<result property="sal" column="sal" />
+		<result property="comm" column="comm" />
+		<result property="deptno" column="deptno" />
+	</resultMap>
+
+	<!-- id: 변수명(이전체리절트맵에대한) / type: 클래스의 이름 (N의 관계) -->
+    <resultMap id="deptMap" type="DeptVO">
+       <result property="deptno" column="deptno"/>
+       <result property="dname" column="dname"/>
+       <result property="loc" column="loc"/>
+		<!-- 클래스에서 list로 돼있으면 컬렉션으로 불러들임(DeptVO에서 List로 Emp테이블을 조인하고있으니까 -->
+	     <collection property="empList" resultMap="empMap"></collection>   
+   </resultMap> 
+
+
+	<!-- 매핑 다 시켜준 후에 쿼리문이 들어감m resultMap에는 매핑명이 들어가야해!!주의!! -->
+	<select id="getDeptEmpList" resultMap="deptMap">
+       <![CDATA[
+           select * from emp, dept where emp.deptno = dept.deptno 
+       ]]>
+	</select>
+
+
+</mapper>
